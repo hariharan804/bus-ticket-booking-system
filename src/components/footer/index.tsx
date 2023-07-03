@@ -1,10 +1,12 @@
+'use client';
 import { Box, Typography } from '@mui/material';
 import React from 'react';
 
 function Footer() {
   return (
+    <div>
     <Box
-      p={1}
+      p={2}
       sx={{
         backgroundColor: '#30287E',
       }}
@@ -13,6 +15,7 @@ function Footer() {
         © 2023 Bus Ticket Booking System, Inc.
       </Typography>
     </Box>
+    </div>
   );
 }
 

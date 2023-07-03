@@ -1,3 +1,4 @@
+'use client';
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -40,7 +41,7 @@ function Header() {
   };
 
   return (
-    <>
+    <div>
       <AppBar position="fixed" elevation={0}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
@@ -180,7 +181,7 @@ function Header() {
         </Container>
       </AppBar>
       <Box sx={{ height: { xs: '56px', sm: '64px' } }} />
-    </>
+    </div>
   );
 }
 export default Header;

@@ -2,9 +2,9 @@
 import { Metadata } from 'next';
 import './globals.css';
 import { MuiThemeProvider } from '@/helpers/theme';
-import Header from '@/components/header';
-import Footer from '@/components/footer';
-import { Box } from '@mui/material';
+// import Header from '@/components/header';
+// import Footer from '@/components/footer';
+// import { Box } from '@mui/material';
 import '@fontsource/nunito-sans';
 import '@fontsource/lato';
 
@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <MuiThemeProvider>
-          <Box
+          {/* <Box
             display={'flex'}
             flexDirection={'column'}
             sx={{ minHeight: '100vh' }}
@@ -30,7 +30,8 @@ export default function RootLayout({
             <Header />
             <Box flexGrow={1}>{children}</Box>
             <Footer />
-          </Box>
+          </Box> */}
+          {children}
         </MuiThemeProvider>
       </body>
     </html>
