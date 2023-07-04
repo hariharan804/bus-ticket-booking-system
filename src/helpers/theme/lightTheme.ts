@@ -142,6 +142,7 @@ export const lightTheme: ThemeOptions = {
       primary: '#1b025c',
       secondary: '#342763',
       disabled: '#eae6f5',
+      A100:' #484759',
       900: '#151219',
       800: '#2a2333',
       700: '#3e354c',

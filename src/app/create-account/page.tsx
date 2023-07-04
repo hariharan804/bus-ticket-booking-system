@@ -16,7 +16,7 @@ export const styles: { [key: string]: SxProps } = {
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
-    gap:'16px',
+    gap: '16px',
     // background: 'rgb(167,142,255)',
     background:
       'radial-gradient(circle, rgba(167,142,255,.6) 0%, rgba(243,242,255,1) 100%)',
@@ -76,10 +76,11 @@ export const styles: { [key: string]: SxProps } = {
   },
 };
 
-function Login() {
+function CreateAccount() {
   const schema = yup
     .object()
     .shape({
+      name: yup.string(),
       email: yup
         .string()
         .trim()
@@ -120,14 +121,35 @@ function Login() {
   return (
     <div>
       <Box sx={styles.root}>
-        <Typography mb={1} sx={{...styles.heading, fontSize:'26px'}}>
-            Welcome
-          </Typography>
+        <Typography mb={1} sx={{ ...styles.heading, fontSize: '26px' }}>
+          Create an Account
+        </Typography>
         <Box sx={styles.loginContainer}>
           <Typography mb={1} sx={styles.heading}>
-            Login
+            Sign up
           </Typography>
           <form>
+            <Box sx={styles.inputContainer}>
+              <Controller
+                name="name"
+                control={control}
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <MyInput
+                    type="text"
+                    label="Name :"
+                    startAdornment={<EmailIcon sx={{ color: '#88868d' }} />}
+                    placeholder="Enter your Name"
+                    value={value}
+                    onChange={onChange}
+                    helperText={error ? error.message : ''}
+                    error={!!error}
+                  />
+                )}
+              />
+            </Box>
             <Box sx={styles.inputContainer}>
               <Controller
                 name="email"
@@ -175,6 +197,32 @@ function Login() {
                 )}
               />
             </Box>
+            <Box sx={styles.inputContainer}>
+              <Controller
+                name="password"
+                control={control}
+                defaultValue=""
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <MyInput
+                    label="DOB :"
+                    // startAdornment={<PasswordIcon sx={{ color: '#88868d' }} />}
+                    // endAdornment={<HiEye/>}
+                    placeholder="Enter your password"
+                    value={value}
+                    onChange={(e: string | React.ChangeEvent<Element>) =>
+                      onChange(e)
+                    }
+                    helperText={error ? error.message : ''}
+                    error={!!error}
+                    type={'date'}
+                    defaultValue={undefined}
+                  />
+                )}
+              />
+            </Box>
             {/* <Typography
                     variant="h5"
                     component="h3"
@@ -193,7 +241,7 @@ function Login() {
               type="submit"
               disableElevation
             >
-              LogIn
+              Sign up
             </Button>
           </form>
           <Typography
@@ -202,8 +250,8 @@ function Login() {
             align="center"
             sx={styles.notMember}
           >
-            <Link href="/create-account">
-              Not a Member? <span>Create Account</span>
+            <Link href="/login">
+              Already have an account? <span>Login</span>
             </Link>
           </Typography>
         </Box>
@@ -212,4 +260,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default CreateAccount;
