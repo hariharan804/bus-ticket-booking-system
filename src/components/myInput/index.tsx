@@ -70,7 +70,6 @@ export const MyInput = (props: MyInputProps) => {
       '& .MuiInputBase-root': {
         fontWeight: '600',
         fontSize: '16px',
-        lineHeight: '19px',
         border: '1px solid #E4E8EE',
         borderRadius: '8px',
         padding: '3px 6px',
@@ -79,9 +78,9 @@ export const MyInput = (props: MyInputProps) => {
       '& .MuiInputLabel-root': {
         fontWeight: '600',
         fontSize: '16px',
-        lineHeight: '16px',
         letterSpacing: '0.05rem',
         color: theme.palette.text.A100,
+        marginBottom:'4px'
       },
       '& .MuiFormHelperText-root': {
         fontWeight: '500',

@@ -1,4 +1,5 @@
 'use client';
+import Layout from '@/components/layout';
 import {
   Box,
   Typography,
@@ -81,7 +82,8 @@ export const styles: { [key: string]: SxProps } = {
 
 export default function Home() {
   return (
-    <>
+    <Layout>
+      <>
       <Box sx={styles.topSection}>
         <Box sx={styles.topSection2}>
           <Typography sx={styles.sectionDes}>
@@ -178,6 +180,7 @@ export default function Home() {
           </Grid>
         </Grid>
       </Box>
-    </>
+      </>
+    </Layout>
   );
 }
