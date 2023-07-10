@@ -1,30 +1,33 @@
-'use client';
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
+"use client";
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
+import { useStore } from "@/store/authStore";
+import { useRouter } from "next/navigation";
 
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-
+const pages = ["Products", "Pricing", "Blog"];
+const settings = ["Profile", "Account", "Dashboard", "Logout"];
 function Header() {
+  const { isAuth } = useStore();
+  const router = useRouter(); 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null,
+    null
   );
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null,
+    null
   );
-  const appName = 'Bus Ticket Booking System';
+  const appName = "Bus Ticket Booking System";
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -46,7 +49,7 @@ function Header() {
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <DirectionsBusIcon
-              sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}
+              sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
             />
             <Typography
               variant="h6"
@@ -55,18 +58,18 @@ function Header() {
               href="/"
               sx={{
                 mr: 2,
-                display: { xs: 'none', md: 'flex' },
-                fontFamily: 'Nunito Sans',
+                display: { xs: "none", md: "flex" },
+                fontFamily: "Nunito Sans",
                 fontWeight: 700,
                 // letterSpacing: '.3rem',
-                color: 'inherit',
-                textDecoration: 'none',
+                color: "inherit",
+                textDecoration: "none",
               }}
             >
               {appName}
             </Typography>
 
-            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
               <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -81,18 +84,18 @@ function Header() {
                 id="menu-appbar"
                 anchorEl={anchorElNav}
                 anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left',
+                  vertical: "bottom",
+                  horizontal: "left",
                 }}
                 keepMounted
                 transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
+                  vertical: "top",
+                  horizontal: "left",
                 }}
                 open={Boolean(anchorElNav)}
                 onClose={handleCloseNavMenu}
                 sx={{
-                  display: { xs: 'block', md: 'none' },
+                  display: { xs: "block", md: "none" },
                 }}
               >
                 {pages.map((page) => (
@@ -103,7 +106,7 @@ function Header() {
               </Menu>
             </Box>
             <DirectionsBusIcon
-              sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }}
+              sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
             />
             <Typography
               variant="h5"
@@ -112,75 +115,82 @@ function Header() {
               href=""
               sx={{
                 mr: 2,
-                display: { xs: 'flex', md: 'none' },
+                display: { xs: "flex", md: "none" },
                 flexGrow: 1,
-                fontFamily: 'Nunito Sans',
+                fontFamily: "Nunito Sans",
                 fontWeight: 700,
-                letterSpacing: '.2rem',
-                color: 'inherit',
-                textDecoration: 'none',
+                letterSpacing: ".2rem",
+                color: "inherit",
+                textDecoration: "none",
               }}
             >
-              {'BTBS'}
+              {"BTBS"}
             </Typography>
-            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {pages.map((page) => (
                 <Button
                   key={page}
                   onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
+                  sx={{ my: 2, color: "white", display: "block" }}
                 >
                   {page}
                 </Button>
               ))}
             </Box>
-
             <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar
-                    sx={{
-                      fontFamily: 'Nunito Sans',
-                      backgroundColor: 'secondary.200',
-                      color: 'primary.dark',
-                    }}
-                  >
-                    <Typography
-                      sx={{ fontWeight: '700', fontSize: '20px' }}
-                      color="inherit"
+              {isAuth ? (
+ 
+                  <Box sx={{ flexGrow: 0 }}>
+                    <Tooltip title="Open settings">
+                      <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                        <Avatar
+                          sx={{
+                            fontFamily: "Nunito Sans",
+                            backgroundColor: "secondary.200",
+                            color: "primary.dark",
+                          }}
+                        >
+                          <Typography
+                            sx={{ fontWeight: "700", fontSize: "20px" }}
+                            color="inherit"
+                          >
+                            H
+                          </Typography>
+                        </Avatar>
+                      </IconButton>
+                    </Tooltip>
+                    <Menu
+                      sx={{ mt: "45px" }}
+                      id="menu-appbar"
+                      anchorEl={anchorElUser}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      open={Boolean(anchorElUser)}
+                      onClose={handleCloseUserMenu}
                     >
-                      H
-                    </Typography>
-                  </Avatar>
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: '45px' }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
+                      {settings.map((setting) => (
+                        <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                          <Typography textAlign="center">{setting}</Typography>
+                        </MenuItem>
+                      ))}
+                    </Menu>
+                  </Box>
+                 
+              ) : (
+                <Button variant="outlined" color='warning' onClick={()=> router.push('/login')}>Login</Button>
+              )}
             </Box>
           </Toolbar>
         </Container>
       </AppBar>
-      <Box sx={{ height: { xs: '56px', sm: '64px' } }} />
+      <Box sx={{ height: { xs: "56px", sm: "64px" } }} />
     </div>
   );
 }

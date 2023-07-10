@@ -1,77 +1,78 @@
-'use client';
-import { Box, Button, SxProps, Typography } from '@mui/material';
-import { useRouter } from 'next/router';
-import React from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { EmailIcon, PasswordIcon } from '@/assets/svg';
-import { MyInput } from '@/components';
-import Link from 'next/link';
+"use client";
+import { Box, Button, SxProps, Typography } from "@mui/material";
+import React from "react";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { EmailIcon, PasswordIcon } from "@/assets/svg";
+import { MyInput } from "@/components";
+import Link from "next/link";
+import { useStore } from "@/store/authStore";
+import { useRouter } from "next/navigation";
 
 export const styles: { [key: string]: SxProps } = {
   root: {
-    minHeight: '100svh',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column',
-    gap:'16px',
+    minHeight: "100svh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+    gap: "16px",
     // background: 'rgb(167,142,255)',
     background:
-      'radial-gradient(circle, rgba(167,142,255,.6) 0%, rgba(243,242,255,1) 100%)',
+      "radial-gradient(circle, rgba(167,142,255,.6) 0%, rgba(243,242,255,1) 100%)",
   },
   loginContainer: {
-    minWidth: { xs: '90%', sm: '350px' },
-    backgroundColor: 'common.white',
-    padding: { xs: '16px', sm: '20px' },
-    borderRadius: '8px',
-    boxShadow: '0 3px 10px #00000011',
+    minWidth: { xs: "90%", sm: "350px" },
+    backgroundColor: "common.white",
+    padding: { xs: "16px", sm: "20px" },
+    borderRadius: "8px",
+    boxShadow: "0 3px 10px #00000011",
   },
   heading: {
-    fontSize: '20px',
-    fontWeight: '700',
-    color: 'text.900',
+    fontSize: "20px",
+    fontWeight: "700",
+    color: "text.900",
   },
   inputContainer: {
-    marginTop: '12px',
+    marginTop: "12px",
   },
   forgetPassword: {
-    color: 'text.700',
-    marginTop: '10px',
-    marginBottom: '10px',
-    fontWeight: '600',
-    fontSize: '13px',
-    lineHeight: '16px',
-    '& span': {
-      color: 'secondary.dark',
+    color: "text.700",
+    marginTop: "10px",
+    marginBottom: "10px",
+    fontWeight: "600",
+    fontSize: "13px",
+    lineHeight: "16px",
+    "& span": {
+      color: "secondary.dark",
     },
   },
   loginBtn: {
-    color: 'common.white',
-    fontWeight: '600',
-    fontSize: '14px',
-    lineHeight: '19px',
-    textTransform: 'uppercase',
-    letterSpacing: '0.06rem',
-    marginTop: '6px',
-    backgroundColor: 'secondary.dark',
-    borderRadius: '8px',
-    padding: '8px 12px',
-    '&:hover': {
-      backgroundColor: 'secondary.dark',
-      opacity: '0.80',
+    color: "common.white",
+    fontWeight: "600",
+    fontSize: "14px",
+    lineHeight: "19px",
+    textTransform: "uppercase",
+    letterSpacing: "0.06rem",
+    marginTop: "6px",
+    backgroundColor: "secondary.dark",
+    borderRadius: "8px",
+    padding: "10px 12px",
+    "&:hover": {
+      backgroundColor: "secondary.dark",
+      opacity: "0.80",
     },
   },
   notMember: {
-    color: 'text.700',
-    marginTop: '25px',
-    marginBottom: '0px',
-    fontWeight: '600',
-    fontSize: '14px',
-    lineHeight: '16px',
-    '& span': {
-      color: 'secondary.main',
+    color: "text.700",
+    marginTop: "25px",
+    marginBottom: "0px",
+    fontWeight: "600",
+    fontSize: "14px",
+    lineHeight: "16px",
+    "& span": {
+      color: "secondary.main",
     },
   },
 };
@@ -83,46 +84,42 @@ function Login() {
       email: yup
         .string()
         .trim()
-        .email('Please the enter valid Email ID')
-        .required('Please the enter Email ID'),
+        .email("Please the enter valid Email ID")
+        .required("Please the enter Email ID"),
       password: yup
         .string()
         .trim()
-        .required('Please enter the password')
-        .min(6, 'Password must be min 6 characters')
-        .max(20, 'Password must be max 20 characters')
-        .matches(/^\S*$/, 'Space not allowed!'),
+        .required("Please enter the password")
+        .min(6, "Password must be min 6 characters")
+        .max(20, "Password must be max 20 characters")
+        .matches(/^\S*$/, "Space not allowed!"),
     })
     .required();
-
+    const router = useRouter();
+  const { userLogin } = useStore();
   const { handleSubmit, control } = useForm({
-    defaultValues: { email: 'superadmin@gmail.com', password: '123456' },
+    defaultValues: { email: "demouser@mail.com", password: "user@123" },
 
     resolver: yupResolver(schema),
   });
   // const router = useRouter();
 
-  const onSubmit = (data: any) => {
-    console.log('🚀 ~ file: index.tsx:63 ~ onSubmit ~ data:', data);
-    // setLoadingState(true);
-    // const loginData = login(data);
-    // loginData.then((data: any) => {
-    //   if (data?.error === true) {
-    //     modelDataSet('Warning', true, 'warning', data?.message);
-    //     setLoadingState(false);
-    //   } else {
-    //     router.replace('/');
-    //     setLoadingState(false);
-    //   }
-    // });
+  const onSubmit = async (data: any) => {
+    const res = await userLogin({
+      email: data?.email,
+      password: data?.password,
+    });
+    if (res?.email) {
+      router.replace('/')
+    }
   };
 
   return (
     <div>
       <Box sx={styles.root}>
-        <Typography mb={1} sx={{...styles.heading, fontSize:'26px'}}>
-            Welcome
-          </Typography>
+        <Typography mb={1} sx={{ ...styles.heading, fontSize: "26px" }}>
+          Welcome
+        </Typography>
         <Box sx={styles.loginContainer}>
           <Typography mb={1} sx={styles.heading}>
             Login
@@ -139,11 +136,11 @@ function Login() {
                   <MyInput
                     type="text"
                     label="Email ID :"
-                    startAdornment={<EmailIcon sx={{ color: '#88868d' }} />}
+                    startAdornment={<EmailIcon sx={{ color: "#88868d" }} />}
                     placeholder="Enter your Email ID"
                     value={value}
                     onChange={onChange}
-                    helperText={error ? error.message : ''}
+                    helperText={error ? error.message : ""}
                     error={!!error}
                   />
                 )}
@@ -160,16 +157,16 @@ function Login() {
                 }) => (
                   <MyInput
                     label="Password :"
-                    startAdornment={<PasswordIcon sx={{ color: '#88868d' }} />}
+                    startAdornment={<PasswordIcon sx={{ color: "#88868d" }} />}
                     // endAdornment={<HiEye/>}
                     placeholder="Enter your password"
                     value={value}
                     onChange={(e: string | React.ChangeEvent<Element>) =>
                       onChange(e)
                     }
-                    helperText={error ? error.message : ''}
+                    helperText={error ? error.message : ""}
                     error={!!error}
-                    type={'text'}
+                    type={"text"}
                     defaultValue={undefined}
                   />
                 )}
