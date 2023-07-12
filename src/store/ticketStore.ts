@@ -21,9 +21,7 @@ export const useTicketStore = create(
       //  expir
 
       updateTicketStore: (data: object) => {
-        console.log("🚀 ~ file: ticketStore.ts:24 ~ data:", data);
         const oldData = get();
-        console.log("🚀 ~ file: ticketStore.ts:26 ~ oldData:", oldData)
         set({ ...oldData, ...data });
       },
     }),

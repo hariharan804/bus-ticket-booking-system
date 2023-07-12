@@ -20,40 +20,36 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { styles } from "../ticket-booking/styles";
+import { useRouter } from "next/navigation";
+import { useTicketStore } from "@/store/ticketStore";
 
 function Billing() {
   const schema = yup
     .object()
     .shape({
-      name: yup.string(),
-      email: yup
-        .string()
-        .trim()
-        .email("Please the enter valid Email ID")
-        .required("Please the enter Email ID"),
-      password: yup
-        .string()
-        .trim()
-        .required("Please enter the password")
-        .min(6, "Password must be min 6 characters")
-        .max(20, "Password must be max 20 characters")
-        .matches(/^\S*$/, "Space not allowed!"),
+      cardNumber: yup.string().required("Please Enter Card Number"),
+      name: yup.string().required("Please Enter Card holder name"),
+      expiryDate: yup.string().required("Please Enter Expiry Date"),
+      cvv: yup.string().required("Please Enter Card cvv"),
     })
     .required();
-
+    const ticketData = useTicketStore()
+  const router = useRouter();
   const { handleSubmit, control, watch } = useForm({
-    defaultValues: { email: "superadmin@gmail.com", password: "123456" },
+    // defaultValues: { email: "superadmin@gmail.com", password: "123456" },
 
     resolver: yupResolver(schema),
   });
-  console.log("🚀 ~ file: page.tsx:43 ~ TicketBooking ~ watch:", watch());
-
+  const onSubmit = (data: any) => {
+    // updateTicketStore(data);
+    router.push("/user/view-booked-tickets");
+  };
   return (
     <Container>
       <Typography sx={styles.title} mt={3}>
         Billing
       </Typography>
-      <Box sx={{...styles.section, padding:'22px 26px'}}>
+      <Box sx={{ ...styles.section, padding: "22px 26px" }}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={8}>
             <Typography sx={styles.heading}>
@@ -63,7 +59,7 @@ function Billing() {
               <Grid item xs={12} sm={6} md={4}>
                 <Box sx={styles.inputContainer}>
                   <Controller
-                    name="name"
+                    name="cardNumber"
                     control={control}
                     render={({
                       field: { onChange, value },
@@ -72,7 +68,7 @@ function Billing() {
                       <MyInput
                         type="text"
                         label="Card Number :"
-                        placeholder="Enter your Name"
+                        placeholder="Enter your card Number"
                         value={value}
                         onChange={onChange}
                         helperText={error ? error.message : ""}
@@ -108,7 +104,7 @@ function Billing() {
               <Grid item xs={12} sm={6} md={4}>
                 <Box sx={styles.inputContainer}>
                   <Controller
-                    name="name"
+                    name="expiryDate"
                     control={control}
                     render={({
                       field: { onChange, value },
@@ -117,7 +113,7 @@ function Billing() {
                       <MyInput
                         type="text"
                         label="Expiry Date :"
-                        placeholder="Enter Card Holder Name"
+                        placeholder="Enter Card Expiry Date"
                         value={value}
                         onChange={onChange}
                         helperText={error ? error.message : ""}
@@ -130,7 +126,7 @@ function Billing() {
               <Grid item xs={12} sm={6} md={4}>
                 <Box sx={styles.inputContainer}>
                   <Controller
-                    name="name"
+                    name="cvv"
                     control={control}
                     render={({
                       field: { onChange, value },
@@ -139,7 +135,7 @@ function Billing() {
                       <MyInput
                         type="text"
                         label="CVV :"
-                        placeholder="Enter Card Holder Name"
+                        placeholder="Enter Card CVV"
                         value={value}
                         onChange={onChange}
                         helperText={error ? error.message : ""}
@@ -152,57 +148,64 @@ function Billing() {
             </Grid>
           </Grid>
           <Grid item xs={12} md={4}>
-          <Box
-            sx={{
-              ...styles.section,
-              border:'none',
-              borderRadius:'0',
-              borderLeft: "1.4px solid",
-              borderLeftColor: "#00000014",
-            }}
-          >
-            <Stack direction={"row"} mb={1}>
-              <Box flexGrow={1}>
-                <Typography sx={styles.costText}>Base Fare</Typography>
-              </Box>
-              <Box flexGrow={1}>
-                <Typography sx={styles.cost} align="right">
-                  ₹ 1153{" "}
-                </Typography>
-              </Box>
-            </Stack>
-            <Stack direction={"row"} mb={1}>
-              <Box flexGrow={1}>
-                <Typography sx={styles.costText}>Tax</Typography>
-              </Box>
-              <Box flexGrow={1}>
-                <Typography sx={styles.cost} align="right">
-                  ₹ 58
-                </Typography>
-              </Box>
-            </Stack>
-            <Stack direction={"row"} mb={1.8}>
-              <Box flexGrow={1}>
-                <Typography sx={styles.cost}>Total Base Price</Typography>
-              </Box>
-              <Box flexGrow={1}>
-                <Typography sx={styles.cost} align="right">
-                  ₹1211
-                </Typography>
-              </Box>
-            </Stack>
-            <Divider sx={{borderColor:'secondary.400', borderStyle:'dashed', marginBottom:'12px'}}/>
-            <Button
-              // onClick={handleSubmit(onSubmit)}
-              sx={styles.loginBtn}
-              fullWidth={true}
-              variant="contained"
-              type="submit"
-              disableElevation
+            <Box
+              sx={{
+                ...styles.section,
+                border: "none",
+                borderRadius: "0",
+                borderLeft: "1.4px solid",
+                borderLeftColor: "#00000014",
+              }}
             >
-              PAY NOW
-            </Button>
-          </Box>
+              <Stack direction={"row"} mb={1}>
+                <Box flexGrow={1}>
+                  <Typography sx={styles.costText}>Base Fare</Typography>
+                </Box>
+                <Box flexGrow={1}>
+                  <Typography sx={styles.cost} align="right">
+                    ₹ {ticketData?.place?.base_fare}
+                  </Typography>
+                </Box>
+              </Stack>
+              <Stack direction={"row"} mb={1}>
+                <Box flexGrow={1}>
+                  <Typography sx={styles.costText}>Tax</Typography>
+                </Box>
+                <Box flexGrow={1}>
+                  <Typography sx={styles.cost} align="right">
+                    ₹ {ticketData?.place?.base_fare * 0.02}
+                  </Typography>
+                </Box>
+              </Stack>
+              <Stack direction={"row"} mb={1.8}>
+                <Box flexGrow={1}>
+                  <Typography sx={styles.cost}>Total Base Price</Typography>
+                </Box>
+                <Box flexGrow={1}>
+                  <Typography sx={styles.cost} align="right">
+                  ₹ {(ticketData?.place?.base_fare * 0.02) + ticketData?.place?.base_fare}
+                  </Typography>
+                </Box>
+              </Stack>
+              <Divider
+                sx={{
+                  borderColor: "secondary.400",
+                  borderStyle: "dashed",
+                  marginBottom: "12px",
+                }}
+              />
+              <Button
+                // onClick={handleSubmit(onSubmit)}
+                sx={styles.loginBtn}
+                fullWidth={true}
+                variant="contained"
+                type="submit"
+                disableElevation
+                onClick={handleSubmit(onSubmit)}
+              >
+                PAY NOW
+              </Button>
+            </Box>
           </Grid>
         </Grid>
       </Box>

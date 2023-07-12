@@ -16,9 +16,9 @@ import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 import { useStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
 
-const pages = ["Products", "Pricing", "Blog"];
 
 function Header() {
+  const pages = ["Products", "Pricing", "Blog"];
   const { isAuth, userDetails, setAuth, setUserDetails } = useStore();
   const router = useRouter();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -42,6 +42,7 @@ function Header() {
     },
     { label: "Logout", onClick: logout },
   ];
+  
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };

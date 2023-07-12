@@ -22,6 +22,7 @@ import { styles } from "./styles";
 import { useStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
 import { useTicketStore } from "@/store/ticketStore";
+import { useEffect, useState } from "react";
 
 function TicketBooking() {
   const schema = yup
@@ -29,14 +30,14 @@ function TicketBooking() {
     .shape({
       traveler_name: yup.string().required("Please the traveler name"),
       gender: yup.string().required("Please select Gender"),
-      place: yup.string().required("Please select Place"),
+      place: yup.object().required("Please select Place"),
       travel_time: yup.string().required("Please select Place"),
       email: yup
         .string()
         .trim()
         .email("Please the enter valid Email ID")
         .required("Please the enter Email ID"),
-      mobile: yup.number().required("Please enter the Mobile Number")
+      mobile: yup.number().required("Please enter the Mobile Number"),
       // .min(9,'Min 10 dight only').max(10,'Max 10 dight only'),
     })
     .required();
@@ -44,14 +45,64 @@ function TicketBooking() {
   const { updateTicketStore } = useTicketStore();
   const router = useRouter();
   const { handleSubmit, control, watch } = useForm({
-    // defaultValues: { email: "superadmin@gmail.com", mobile: 123456 },
+    defaultValues: {
+      email: userDetails?.email,
+      traveler_name: userDetails?.name,
+    },
     resolver: yupResolver(schema),
   });
-  console.log("🚀 ~ file: page.tsx:43 ~ TicketBooking ~ watch:", watch());
+  const [currentBus, setCurrentBus] = useState({
+    email: "",
+    traveler_name: "",
+    travel_time: "",
+    place: {
+      id: 0,
+      label: "",
+      drop_address: "",
+      pickup_address: "",
+      base_fare: 0,
+      travel_hours: "",
+      bus_name: "",
+      bus_no: "",
+      bus_contact: "",
+    },
+    mobile: "",
+  });
 
   const onSubmit = (data: any) => {
     updateTicketStore(data);
+    router.push("/user/billing");
   };
+
+  useEffect(() => {
+    if (watch()?.place || watch()?.travel_time) {
+      setCurrentBus(watch());
+    }
+  }, [watch()?.place, watch()?.travel_time]);
+  const busDetails = [
+    {
+      id: 1,
+      label: "Chennai to Madurai",
+      drop_address: "Madurai Bus Stand",
+      pickup_address: "CMPT Bus Stand",
+      base_fare: 600,
+      travel_hours: "8h 30m",
+      bus_name: "RVS Bus Service",
+      bus_no: "TN 20 BN 1020",
+      bus_contact: "8887657556",
+    },
+    {
+      id: 2,
+      label: "Madurai to Chennai",
+      drop_address: "CMPT Bus Stand(Last stop)",
+      pickup_address: "Madurai Bus Stand",
+      base_fare: 600,
+      travel_hours: "8h 30m",
+      bus_name: "RVS Bus Service",
+      bus_no: "TN 20 BN 1020",
+      bus_contact: "8887657556",
+    },
+  ];
   return (
     <Container>
       <Typography sx={styles.title} mt={3}>
@@ -104,12 +155,9 @@ function TicketBooking() {
                       inputProps={{ "aria-label": "Without label" }}
                       error={!!error}
                     >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      <MenuItem value={10}>Ten</MenuItem>
-                      <MenuItem value={20}>Twenty</MenuItem>
-                      <MenuItem value={30}>Thirty</MenuItem>
+                      <MenuItem value={"Male"}>Male</MenuItem>
+                      <MenuItem value={"Female"}>Female</MenuItem>
+                      <MenuItem value={"Other"}>Other</MenuItem>
                     </Select>
                     <FormHelperText sx={{ color: "#f44f5a" }}>
                       {error ? error.message : ""}
@@ -131,22 +179,20 @@ function TicketBooking() {
                 }) => (
                   <FormControl fullWidth>
                     <Select
-                      value={value}
-                      onChange={(e) => {
-                        onChange(e.target.value);
-                      }}
-                      displayEmpty
+                      value={value?.id}
+                      // onChange={(e) => {
+                      //   onChange(e.target.value);
+                      // }}
                       fullWidth
                       size="small"
                       inputProps={{ "aria-label": "Without label" }}
                       error={!!error}
                     >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      <MenuItem value={10}>Ten</MenuItem>
-                      <MenuItem value={20}>Twenty</MenuItem>
-                      <MenuItem value={30}>Thirty</MenuItem>
+                      {busDetails?.map((bus) => (
+                        <MenuItem value={bus?.id} onClick={() => onChange(bus)}>
+                          {bus?.label}
+                        </MenuItem>
+                      ))}
                     </Select>
                     <FormHelperText sx={{ color: "#f44f5a" }}>
                       {error ? error.message : ""}
@@ -184,67 +230,74 @@ function TicketBooking() {
 
 Gender date and time place*/}
       </Box>
-      <Box
-        sx={{
-          ...styles.section,
-          border: ".10rem dashed",
-          borderColor: "primary.light",
-          padding: "22px",
-        }}
-      >
-        <Stack
-          direction={"row"}
-          divider={<TrendingFlatIcon color="inherit" />}
-          gap={"12px"}
-          sx={{ color: "secondary.light" }}
+      {currentBus?.place?.id !== 0 && currentBus?.travel_time && (
+        <Box
+          sx={{
+            ...styles.section,
+            border: ".10rem dashed",
+            borderColor: "primary.light",
+            padding: "22px",
+          }}
         >
-          <Typography
-            sx={{ ...styles.time, color: "secondary.main" }}
-            color="secondary.main"
+          <Stack
+            direction={"row"}
+            divider={<TrendingFlatIcon color="inherit" />}
+            gap={"12px"}
+            sx={{ color: "secondary.light" }}
           >
-            21:40 9 Jul' 23, Sun
-          </Typography>
-          <Typography
-            sx={{ ...styles.time, color: "secondary.main" }}
-            color="secondary.main"
-          >
-            21:40 9 Jul' 23, Sun
-          </Typography>
-        </Stack>
-        <Grid container spacing={2} alignItems={"center"}>
-          <Grid item xs={12} sm={4}>
-            <Typography sx={styles.time}>21:40 9 Jul' 23, Sun</Typography>
-            <Typography sx={styles.place}>
-              Delhi - Akshardham metro station
+            <Typography
+              sx={{ ...styles.time, color: "secondary.main" }}
+              color="secondary.main"
+            >
+              {currentBus?.place?.label?.split("to")?.[0]}
             </Typography>
-            <Typography sx={styles.label}>
-              Opp Akshardham Metro Station, DTC Bus Stand (Van Pickup) (Delhi)
+            <Typography
+              sx={{ ...styles.time, color: "secondary.main" }}
+              color="secondary.main"
+            >
+              {currentBus?.place?.label?.split("to")?.[1]}
             </Typography>
+          </Stack>
+          <Grid container spacing={2} alignItems={"center"}>
+            <Grid item xs={12} sm={4}>
+              <Typography sx={styles.time}>
+                {currentBus?.travel_time}
+              </Typography>
+              <Typography sx={styles.place}>
+                {currentBus?.place?.label?.split("to")?.[0]}
+              </Typography>
+              <Typography sx={styles.label}>
+                {currentBus?.place?.drop_address}
+              </Typography>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={4}
+              sx={{
+                ".MuiDivider-withChildren:after, .MuiDivider-withChildren:before":
+                  { border: "2px dotted", borderColor: "primary.200" },
+              }}
+            >
+              <Divider>
+                <Chip
+                  sx={styles.chip}
+                  label={currentBus?.place?.travel_hours}
+                />
+              </Divider>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Typography sx={styles.time}> </Typography>
+              <Typography sx={styles.place}>
+                {currentBus?.place?.label?.split("to")?.[1]}
+              </Typography>
+              <Typography sx={styles.label}>
+                {currentBus?.place?.drop_address}
+              </Typography>
+            </Grid>
           </Grid>
-          <Grid
-            item
-            xs={12}
-            sm={4}
-            sx={{
-              ".MuiDivider-withChildren:after, .MuiDivider-withChildren:before":
-                { border: "2px dotted", borderColor: "primary.200" },
-            }}
-          >
-            <Divider>
-              <Chip sx={styles.chip} label={"7h 30m"} />
-            </Divider>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <Typography sx={styles.time}>21:40 9 Jul' 23, Sun</Typography>
-            <Typography sx={styles.place}>
-              Delhi - Akshardham metro station
-            </Typography>
-            <Typography sx={styles.label}>
-              Opp Akshardham Metro Station, DTC Bus Stand (Van Pickup) (Delhi)
-            </Typography>
-          </Grid>
-        </Grid>
-      </Box>
+        </Box>
+      )}
       <Box sx={styles.section}>
         <Typography sx={styles.heading}>Enter Contact Details</Typography>
         <Grid container spacing={2}>
@@ -294,61 +347,64 @@ Gender date and time place*/}
           </Grid>
         </Grid>
       </Box>
-      <Grid container justifyContent={"center"} mb={4}>
-        <Grid item xs={12} sm={4}>
-          <Box
-            sx={{
-              ...styles.section,
-              border: "1.4px solid",
-              borderColor: "secondary.light",
-            }}
-          >
-            <Stack direction={"row"} mb={1}>
-              <Box flexGrow={1}>
-                <Typography sx={styles.costText}>Base Fare</Typography>
-              </Box>
-              <Box flexGrow={1}>
-                <Typography sx={styles.cost} align="right">
-                  ₹ 1153{" "}
-                </Typography>
-              </Box>
-            </Stack>
-            <Stack direction={"row"} mb={1}>
-              <Box flexGrow={1}>
-                <Typography sx={styles.costText}>Tax</Typography>
-              </Box>
-              <Box flexGrow={1}>
-                <Typography sx={styles.cost} align="right">
-                  ₹ 58
-                </Typography>
-              </Box>
-            </Stack>
-            <Stack direction={"row"} mb={1.8}>
-              <Box flexGrow={1}>
-                <Typography sx={styles.cost}>Total Base Price</Typography>
-              </Box>
-              <Box flexGrow={1}>
-                <Typography sx={styles.cost} align="right">
-                  ₹1211
-                </Typography>
-              </Box>
-            </Stack>
-            <Divider
-              sx={{ borderColor: "secondary.400", marginBottom: "12px" }}
-            />
-            <Button
-              onClick={handleSubmit(onSubmit)}
-              sx={styles.loginBtn}
-              fullWidth={true}
-              variant="contained"
-              type="submit"
-              disableElevation
+      {currentBus?.place?.id !== 0 && currentBus?.travel_time && (
+        <Grid container justifyContent={"center"} mb={4}>
+          <Grid item xs={12} sm={4}>
+            <Box
+              sx={{
+                ...styles.section,
+                border: "1.4px solid",
+                borderColor: "secondary.light",
+              }}
             >
-              Continue TO book NOW
-            </Button>
-          </Box>
+              <Stack direction={"row"} mb={1}>
+                <Box flexGrow={1}>
+                  <Typography sx={styles.costText}>Base Fare</Typography>
+                </Box>
+                <Box flexGrow={1}>
+                  <Typography sx={styles.cost} align="right">
+                    ₹ {currentBus?.place?.base_fare}
+                  </Typography>
+                </Box>
+              </Stack>
+              <Stack direction={"row"} mb={1}>
+                <Box flexGrow={1}>
+                  <Typography sx={styles.costText}>Tax</Typography>
+                </Box>
+                <Box flexGrow={1}>
+                  <Typography sx={styles.cost} align="right">
+                    ₹{" "}
+                    {currentBus?.place?.base_fare * 0.02}
+                  </Typography>
+                </Box>
+              </Stack>
+              <Stack direction={"row"} mb={1.8}>
+                <Box flexGrow={1}>
+                  <Typography sx={styles.cost}>Total Base Price</Typography>
+                </Box>
+                <Box flexGrow={1}>
+                  <Typography sx={styles.cost} align="right">
+                    ₹ {(currentBus?.place?.base_fare * 0.02) + currentBus?.place?.base_fare}
+                  </Typography>
+                </Box>
+              </Stack>
+              <Divider
+                sx={{ borderColor: "secondary.400", marginBottom: "12px" }}
+              />
+              <Button
+                onClick={handleSubmit(onSubmit)}
+                sx={styles.loginBtn}
+                fullWidth={true}
+                variant="contained"
+                type="submit"
+                disableElevation
+              >
+                Continue TO book NOW
+              </Button>
+            </Box>
+          </Grid>
         </Grid>
-      </Grid>
+      )}
     </Container>
   );
 }

@@ -45,8 +45,7 @@ function BookedTicket() {
 
     resolver: yupResolver(schema),
   });
-  console.log("🚀 ~ file: page.tsx:43 ~ BookedTicket ~ watch:", watch());
-
+ 
   return (
     <Container>
       <Typography sx={styles.title} mt={3}>
