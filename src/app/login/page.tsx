@@ -166,7 +166,7 @@ function Login() {
                     }
                     helperText={error ? error.message : ""}
                     error={!!error}
-                    type={"text"}
+                    type={"password"}
                     defaultValue={undefined}
                   />
                 )}

@@ -19,34 +19,39 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { styles } from "./styles";
+import { useStore } from "@/store/authStore";
+import { useRouter } from "next/navigation";
+import { useTicketStore } from "@/store/ticketStore";
 
 function TicketBooking() {
   const schema = yup
     .object()
     .shape({
-      name: yup.string(),
+      traveler_name: yup.string().required("Please the traveler name"),
+      gender: yup.string().required("Please select Gender"),
+      place: yup.string().required("Please select Place"),
+      travel_time: yup.string().required("Please select Place"),
       email: yup
         .string()
         .trim()
         .email("Please the enter valid Email ID")
         .required("Please the enter Email ID"),
-      password: yup
-        .string()
-        .trim()
-        .required("Please enter the password")
-        .min(6, "Password must be min 6 characters")
-        .max(20, "Password must be max 20 characters")
-        .matches(/^\S*$/, "Space not allowed!"),
+      mobile: yup.number().required("Please enter the Mobile Number")
+      // .min(9,'Min 10 dight only').max(10,'Max 10 dight only'),
     })
     .required();
-
+  const { userDetails } = useStore();
+  const { updateTicketStore } = useTicketStore();
+  const router = useRouter();
   const { handleSubmit, control, watch } = useForm({
-    defaultValues: { email: "superadmin@gmail.com", password: "123456" },
-
+    // defaultValues: { email: "superadmin@gmail.com", mobile: 123456 },
     resolver: yupResolver(schema),
   });
   console.log("🚀 ~ file: page.tsx:43 ~ TicketBooking ~ watch:", watch());
 
+  const onSubmit = (data: any) => {
+    updateTicketStore(data);
+  };
   return (
     <Container>
       <Typography sx={styles.title} mt={3}>
@@ -58,7 +63,7 @@ function TicketBooking() {
           <Grid item xs={12} sm={4}>
             <Box sx={styles.inputContainer}>
               <Controller
-                name="name"
+                name="traveler_name"
                 control={control}
                 render={({
                   field: { onChange, value },
@@ -81,7 +86,7 @@ function TicketBooking() {
             <Box sx={styles.inputContainer}>
               <Typography sx={styles.label}>Gender :</Typography>
               <Controller
-                name="name"
+                name="gender"
                 control={control}
                 render={({
                   field: { onChange, value },
@@ -106,7 +111,7 @@ function TicketBooking() {
                       <MenuItem value={20}>Twenty</MenuItem>
                       <MenuItem value={30}>Thirty</MenuItem>
                     </Select>
-                    <FormHelperText>
+                    <FormHelperText sx={{ color: "#f44f5a" }}>
                       {error ? error.message : ""}
                     </FormHelperText>
                   </FormControl>
@@ -118,7 +123,7 @@ function TicketBooking() {
             <Box sx={styles.inputContainer}>
               <Typography sx={styles.label}>Select Place :</Typography>
               <Controller
-                name="name"
+                name="place"
                 control={control}
                 render={({
                   field: { onChange, value },
@@ -143,7 +148,7 @@ function TicketBooking() {
                       <MenuItem value={20}>Twenty</MenuItem>
                       <MenuItem value={30}>Thirty</MenuItem>
                     </Select>
-                    <FormHelperText>
+                    <FormHelperText sx={{ color: "#f44f5a" }}>
                       {error ? error.message : ""}
                     </FormHelperText>
                   </FormControl>
@@ -154,7 +159,7 @@ function TicketBooking() {
           <Grid item xs={12} sm={4}>
             <Box sx={styles.inputContainer}>
               <Controller
-                name="name"
+                name="travel_time"
                 control={control}
                 render={({
                   field: { onChange, value },
@@ -163,7 +168,7 @@ function TicketBooking() {
                   <MyInput
                     type="datetime-local"
                     label="Travel Time :"
-                    placeholder="Enter your Name"
+                    placeholder="Enter your Travel Time"
                     value={value}
                     onChange={onChange}
                     helperText={error ? error.message : ""}
@@ -184,7 +189,7 @@ Gender date and time place*/}
           ...styles.section,
           border: ".10rem dashed",
           borderColor: "primary.light",
-          padding:'22px'
+          padding: "22px",
         }}
       >
         <Stack
@@ -246,7 +251,7 @@ Gender date and time place*/}
           <Grid item xs={12} sm={4}>
             <Box sx={styles.inputContainer}>
               <Controller
-                name="name"
+                name="email"
                 control={control}
                 render={({
                   field: { onChange, value },
@@ -255,7 +260,7 @@ Gender date and time place*/}
                   <MyInput
                     type="text"
                     label="Email ID :"
-                    placeholder="Enter your Name"
+                    placeholder="Enter your Email ID"
                     value={value}
                     onChange={onChange}
                     helperText={error ? error.message : ""}
@@ -268,18 +273,18 @@ Gender date and time place*/}
           <Grid item xs={12} sm={4}>
             <Box sx={styles.inputContainer}>
               <Controller
-                name="name"
+                name="mobile"
                 control={control}
                 render={({
                   field: { onChange, value },
                   fieldState: { error },
                 }) => (
                   <MyInput
-                    type="text"
+                    type="number"
                     label="Mobile Number :"
-                    placeholder="Enter your Name"
+                    placeholder="Enter your Mobile Number"
                     value={value}
-                    onChange={onChange}
+                    onChange={(e) => onChange(e as unknown as number)}
                     helperText={error ? error.message : ""}
                     error={!!error}
                   />
@@ -328,9 +333,11 @@ Gender date and time place*/}
                 </Typography>
               </Box>
             </Stack>
-            <Divider sx={{borderColor:'secondary.400', marginBottom:'12px'}}/>
+            <Divider
+              sx={{ borderColor: "secondary.400", marginBottom: "12px" }}
+            />
             <Button
-              // onClick={handleSubmit(onSubmit)}
+              onClick={handleSubmit(onSubmit)}
               sx={styles.loginBtn}
               fullWidth={true}
               variant="contained"

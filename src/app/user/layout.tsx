@@ -1,5 +1,4 @@
 "use client";
-
 import Layout from "@/components/layout";
 import { useStore } from "@/store/authStore";
 import { usePathname, useRouter } from "next/navigation";

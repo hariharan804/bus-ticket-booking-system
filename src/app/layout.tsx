@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { Metadata } from 'next';
 import './globals.css';
 import { MuiThemeProvider } from '@/helpers/theme';

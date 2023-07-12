@@ -17,17 +17,31 @@ import { useStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
 
 const pages = ["Products", "Pricing", "Blog"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+
 function Header() {
-  const { isAuth } = useStore();
-  const router = useRouter(); 
+  const { isAuth, userDetails, setAuth, setUserDetails } = useStore();
+  const router = useRouter();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+  const logout = () => {
+    setUserDetails({});
+    setAuth(false);
+    router.replace("/login");
+  };
   const appName = "Bus Ticket Booking System";
+  const settings = [
+    {
+      label: "Book Ticket",
+      onClick: () => {
+        router.push("/user/ticket-booking");
+      },
+    },
+    { label: "Logout", onClick: logout },
+  ];
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -139,52 +153,66 @@ function Header() {
             </Box>
             <Box sx={{ flexGrow: 0 }}>
               {isAuth ? (
- 
-                  <Box sx={{ flexGrow: 0 }}>
-                    <Tooltip title="Open settings">
-                      <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                        <Avatar
-                          sx={{
-                            fontFamily: "Nunito Sans",
-                            backgroundColor: "secondary.200",
-                            color: "primary.dark",
-                          }}
+                <Box sx={{ flexGrow: 0 }}>
+                  <Tooltip title="Open settings">
+                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                      <Avatar
+                        sx={{
+                          fontFamily: "Nunito Sans",
+                          backgroundColor: "secondary.200",
+                          color: "primary.dark",
+                        }}
+                      >
+                        <Typography
+                          sx={{ fontWeight: "700", fontSize: "20px" }}
+                          color="inherit"
                         >
-                          <Typography
-                            sx={{ fontWeight: "700", fontSize: "20px" }}
-                            color="inherit"
-                          >
-                            H
-                          </Typography>
-                        </Avatar>
-                      </IconButton>
-                    </Tooltip>
-                    <Menu
-                      sx={{ mt: "45px" }}
-                      id="menu-appbar"
-                      anchorEl={anchorElUser}
-                      anchorOrigin={{
-                        vertical: "top",
-                        horizontal: "right",
-                      }}
-                      keepMounted
-                      transformOrigin={{
-                        vertical: "top",
-                        horizontal: "right",
-                      }}
-                      open={Boolean(anchorElUser)}
-                      onClose={handleCloseUserMenu}
-                    >
-                      {settings.map((setting) => (
-                        <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                          <Typography textAlign="center">{setting}</Typography>
-                        </MenuItem>
-                      ))}
-                    </Menu>
-                  </Box>
-                 
+                         {userDetails?.name?.[0]}
+                        </Typography>
+                      </Avatar>
+                    </IconButton>
+                  </Tooltip>
+                  <Menu
+                    sx={{ mt: "45px" }}
+                    id="menu-appbar"
+                    anchorEl={anchorElUser}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    open={Boolean(anchorElUser)}
+                    onClose={handleCloseUserMenu}
+                  >
+                    {settings.map((setting) => (
+                      <MenuItem
+                        key={setting.label}
+                        onClick={() => {
+                          handleCloseUserMenu();
+                          setting?.onClick();
+                        }}
+                      >
+                        <Typography textAlign="center">
+                          {setting.label}
+                        </Typography>
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </Box>
               ) : (
-                <Button variant="outlined" color='warning' onClick={()=> router.push('/login')}>Login</Button>
+                <Box>
+                  <Button
+                    variant="outlined"
+                    color="warning"
+                    onClick={() => router.push("/login")}
+                  >
+                    Login
+                  </Button>
+                </Box>
               )}
             </Box>
           </Toolbar>

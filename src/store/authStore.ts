@@ -26,10 +26,11 @@ export const useStore = create(
           password,
         });
         const user = get().userList;
-        const loggedUser:userDetailsProps = user.find(
-          (val) => val?.email === email && val?.password === password
-        ) || {};
-        set({ userDetails: { ...loggedUser } });
+        const loggedUser: userDetailsProps =
+          user.find(
+            (val) => val?.email === email && val?.password === password
+          ) || {};
+        set({ userDetails: { ...loggedUser }, isAuth: true });
         return loggedUser;
       },
       userList: [
