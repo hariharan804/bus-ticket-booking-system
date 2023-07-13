@@ -9,6 +9,7 @@ import { MyInput } from "@/components";
 import Link from "next/link";
 import { useStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 
 export const styles: { [key: string]: SxProps } = {
   root: {
@@ -95,7 +96,7 @@ function Login() {
         .matches(/^\S*$/, "Space not allowed!"),
     })
     .required();
-    const router = useRouter();
+  const router = useRouter();
   const { userLogin } = useStore();
   const { handleSubmit, control } = useForm({
     defaultValues: { email: "demouser@mail.com", password: "user@123" },
@@ -110,7 +111,10 @@ function Login() {
       password: data?.password,
     });
     if (res?.email) {
-      router.replace('/')
+      toast.success("Login Successfully!");
+      router.replace("/");
+    } else {
+      toast("User not found!");
     }
   };
 

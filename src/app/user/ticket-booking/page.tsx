@@ -90,6 +90,7 @@ function TicketBooking() {
       bus_name: "RVS Bus Service",
       bus_no: "TN 20 BN 1020",
       bus_contact: "8887657556",
+      travel_data:'23/03/23'
     },
     {
       id: 2,
@@ -101,6 +102,7 @@ function TicketBooking() {
       bus_name: "RVS Bus Service",
       bus_no: "TN 20 BN 1020",
       bus_contact: "8887657556",
+      travel_data:'23/03/23'
     },
   ];
   return (

@@ -1,6 +1,6 @@
 import { apiCall } from "@/helpers/api";
 import { userDetailsProps } from "@/types/authProps";
-import { TicketProps } from "@/types/ticketProps";
+import { TicketProps, bookingListProps } from "@/types/ticketProps";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
@@ -9,20 +9,29 @@ export const useTicketStore = create(
     (set, get) => ({
       traveler_name: "",
       gender: "",
-      place: "",
-      time: "",
-      drop_place: "",
-      hours: "",
+      place: {
+        id: 0,
+        label: "",
+        drop_address: "",
+        pickup_address: "",
+        base_fare: 0,
+        travel_hours: "",
+        bus_name: "",
+        bus_no: "",
+        bus_contact: "",
+      },
       email: "",
       mobile: "",
-      base_fare: "",
-      //  card_number:'',
-      //  card_holder_name:'',
-      //  expir
-
+      // base_fare: "",
+      bookedList: [],
       updateTicketStore: (data: object) => {
         const oldData = get();
         set({ ...oldData, ...data });
+      },
+      updateTicketList: (bookingData: bookingListProps) => {
+        console.log(bookingData);
+        const oldData = get().bookedList;
+        set({ bookedList: [...oldData, bookingData] });
       },
     }),
     {

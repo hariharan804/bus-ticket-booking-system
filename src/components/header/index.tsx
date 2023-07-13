@@ -16,9 +16,7 @@ import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 import { useStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
 
-
 function Header() {
-  const pages = ["Products", "Pricing", "Blog"];
   const { isAuth, userDetails, setAuth, setUserDetails } = useStore();
   const router = useRouter();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -33,6 +31,20 @@ function Header() {
     router.replace("/login");
   };
   const appName = "Bus Ticket Booking System";
+  const pages: any = [
+    {
+      label: "Book Ticket",
+      onClick: () => {
+        router.push("/user/ticket-booking");
+      },
+    },
+    {
+      label: "View Booked Tickets",
+      onClick: () => {
+        router.push("/user/view-booked-tickets");
+      },
+    },
+  ];
   const settings = [
     {
       label: "Book Ticket",
@@ -40,9 +52,15 @@ function Header() {
         router.push("/user/ticket-booking");
       },
     },
+    {
+      label: "View Booked Tickets",
+      onClick: () => {
+        router.push("/user/view-booked-tickets");
+      },
+    },
     { label: "Logout", onClick: logout },
   ];
-  
+
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -113,9 +131,15 @@ function Header() {
                   display: { xs: "block", md: "none" },
                 }}
               >
-                {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
+                {pages?.map((page: any) => (
+                  <MenuItem
+                    key={page?.label}
+                    onClick={() => {
+                      handleCloseNavMenu();
+                      page?.onClick();
+                    }}
+                  >
+                    <Typography textAlign="center">{page?.label}</Typography>
                   </MenuItem>
                 ))}
               </Menu>
@@ -142,13 +166,16 @@ function Header() {
               {"BTBS"}
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {pages.map((page) => (
+              {pages.map((page: any) => (
                 <Button
-                  key={page}
-                  onClick={handleCloseNavMenu}
+                  key={page?.label}
+                  onClick={() => {
+                    handleCloseNavMenu();
+                    page?.onClick();
+                  }}
                   sx={{ my: 2, color: "white", display: "block" }}
                 >
-                  {page}
+                  {page?.label}
                 </Button>
               ))}
             </Box>
@@ -168,7 +195,7 @@ function Header() {
                           sx={{ fontWeight: "700", fontSize: "20px" }}
                           color="inherit"
                         >
-                         {userDetails?.name?.[0]}
+                          {userDetails?.name?.[0]}
                         </Typography>
                       </Avatar>
                     </IconButton>

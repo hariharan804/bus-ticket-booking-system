@@ -7,6 +7,7 @@ import { MuiThemeProvider } from '@/helpers/theme';
 // import { Box } from '@mui/material';
 import '@fontsource/nunito-sans';
 import '@fontsource/lato';
+import { Toaster } from 'react-hot-toast';
 
 export const metadata: Metadata = {
   title: `Bus Ticket Booking System`,
@@ -26,12 +27,13 @@ export default function RootLayout({
             display={'flex'}
             flexDirection={'column'}
             sx={{ minHeight: '100vh' }}
-          >
+            >
             <Header />
             <Box flexGrow={1}>{children}</Box>
             <Footer />
           </Box> */}
           {children}
+          <Toaster />
         </MuiThemeProvider>
       </body>
     </html>

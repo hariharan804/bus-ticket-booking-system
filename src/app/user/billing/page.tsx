@@ -7,12 +7,7 @@ import {
   Typography,
   Container,
   Grid,
-  Select,
-  FormHelperText,
-  FormControl,
-  MenuItem,
   Divider,
-  Chip,
   Stack,
   Button,
 } from "@mui/material";
@@ -22,6 +17,7 @@ import * as yup from "yup";
 import { styles } from "../ticket-booking/styles";
 import { useRouter } from "next/navigation";
 import { useTicketStore } from "@/store/ticketStore";
+import { toast } from "react-hot-toast";
 
 function Billing() {
   const schema = yup
@@ -33,7 +29,7 @@ function Billing() {
       cvv: yup.string().required("Please Enter Card cvv"),
     })
     .required();
-    const ticketData = useTicketStore()
+  const ticketData = useTicketStore();
   const router = useRouter();
   const { handleSubmit, control, watch } = useForm({
     // defaultValues: { email: "superadmin@gmail.com", password: "123456" },
@@ -42,7 +38,18 @@ function Billing() {
   });
   const onSubmit = (data: any) => {
     // updateTicketStore(data);
-    router.push("/user/view-booked-tickets");
+    // data.payment = 'success'
+    ticketData?.updateTicketList({
+      id: new Date().getTime().toString(),
+      traveler_name: ticketData?.traveler_name,
+      gender: ticketData?.gender,
+      place: ticketData?.place,
+      email: ticketData?.email,
+      mobile: ticketData?.mobile,
+      payment: "success",
+    });
+    toast.success("Ticket Booked Successfully!");
+    // router.push("/user/view-booked-tickets");
   };
   return (
     <Container>
@@ -183,7 +190,9 @@ function Billing() {
                 </Box>
                 <Box flexGrow={1}>
                   <Typography sx={styles.cost} align="right">
-                  ₹ {(ticketData?.place?.base_fare * 0.02) + ticketData?.place?.base_fare}
+                    ₹{" "}
+                    {ticketData?.place?.base_fare * 0.02 +
+                      ticketData?.place?.base_fare}
                   </Typography>
                 </Box>
               </Stack>
