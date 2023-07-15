@@ -23,6 +23,7 @@ import { useStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
 import { useTicketStore } from "@/store/ticketStore";
 import { useEffect, useState } from "react";
+import { useBusStore } from "@/store/busStore";
 
 function TicketBooking() {
   const schema = yup
@@ -43,6 +44,7 @@ function TicketBooking() {
     .required();
   const { userDetails } = useStore();
   const { updateTicketStore } = useTicketStore();
+  const { busDetailsList } = useBusStore();
   const router = useRouter();
   const { handleSubmit, control, watch } = useForm({
     defaultValues: {
@@ -57,7 +59,7 @@ function TicketBooking() {
     travel_time: "",
     place: {
       id: 0,
-      label: "",
+      designation: "",
       drop_address: "",
       pickup_address: "",
       base_fare: 0,
@@ -79,32 +81,7 @@ function TicketBooking() {
       setCurrentBus(watch() as any);
     }
   }, [watch()?.place, watch()?.travel_time]);
-  const busDetails = [
-    {
-      id: 1,
-      label: "Chennai to Madurai",
-      drop_address: "Madurai Bus Stand",
-      pickup_address: "CMPT Bus Stand",
-      base_fare: 600,
-      travel_hours: "8h 30m",
-      bus_name: "RVS Bus Service",
-      bus_no: "TN 20 BN 1020",
-      bus_contact: "8887657556",
-      travel_data:'23/03/23'
-    },
-    {
-      id: 2,
-      label: "Madurai to Chennai",
-      drop_address: "CMPT Bus Stand(Last stop)",
-      pickup_address: "Madurai Bus Stand",
-      base_fare: 600,
-      travel_hours: "8h 30m",
-      bus_name: "RVS Bus Service",
-      bus_no: "TN 20 BN 1020",
-      bus_contact: "8887657556",
-      travel_data:'23/03/23'
-    },
-  ];
+ 
   return (
     <Container>
       <Typography sx={styles.title} mt={3}>
@@ -181,7 +158,7 @@ function TicketBooking() {
                 }) => (
                   <FormControl fullWidth>
                     <Select
-                      value={value?.id}
+                      value={value?.id as any}
                       // onChange={(e) => {
                       //   onChange(e.target.value);
                       // }}
@@ -190,9 +167,9 @@ function TicketBooking() {
                       inputProps={{ "aria-label": "Without label" }}
                       error={!!error}
                     >
-                      {busDetails?.map((bus) => (
+                      {busDetailsList?.map((bus) => (
                         <MenuItem value={bus?.id} onClick={() => onChange(bus)}>
-                          {bus?.label}
+                          {bus?.designation}
                         </MenuItem>
                       ))}
                     </Select>
@@ -247,13 +224,13 @@ function TicketBooking() {
               sx={{ ...styles.time, color: "secondary.main" }}
               color="secondary.main"
             >
-              {currentBus?.place?.label?.split("to")?.[0]}
+              {currentBus?.place?.designation?.split("to")?.[0]}
             </Typography>
             <Typography
               sx={{ ...styles.time, color: "secondary.main" }}
               color="secondary.main"
             >
-              {currentBus?.place?.label?.split("to")?.[1]}
+              {currentBus?.place?.designation?.split("to")?.[1]}
             </Typography>
           </Stack>
           <Grid container spacing={2} alignItems={"center"}>
@@ -262,7 +239,7 @@ function TicketBooking() {
                 {currentBus?.travel_time}
               </Typography>
               <Typography sx={styles.place}>
-                {currentBus?.place?.label?.split("to")?.[0]}
+                {currentBus?.place?.designation?.split("to")?.[0]}
               </Typography>
               <Typography sx={styles.label}>
                 {currentBus?.place?.pickup_address}
@@ -287,7 +264,7 @@ function TicketBooking() {
             <Grid item xs={12} sm={4}>
               <Typography sx={styles.time}> </Typography>
               <Typography sx={styles.place}>
-                {currentBus?.place?.label?.split("to")?.[1]}
+                {currentBus?.place?.designation?.split("to")?.[1]}
               </Typography>
               <Typography sx={styles.label}>
                 {currentBus?.place?.drop_address}
@@ -371,8 +348,7 @@ function TicketBooking() {
                 </Box>
                 <Box flexGrow={1}>
                   <Typography sx={styles.cost} align="right">
-                    ₹{" "}
-                    {currentBus?.place?.base_fare * 0.02}
+                    ₹ {currentBus?.place?.base_fare * 0.02}
                   </Typography>
                 </Box>
               </Stack>
@@ -382,7 +358,9 @@ function TicketBooking() {
                 </Box>
                 <Box flexGrow={1}>
                   <Typography sx={styles.cost} align="right">
-                    ₹ {(currentBus?.place?.base_fare * 0.02) + currentBus?.place?.base_fare}
+                    ₹{" "}
+                    {currentBus?.place?.base_fare * 0.02 +
+                      currentBus?.place?.base_fare}
                   </Typography>
                 </Box>
               </Stack>

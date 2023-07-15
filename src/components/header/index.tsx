@@ -48,7 +48,7 @@ function Header() {
     {
       label: "Add Bus details",
       onClick: () => {
-        router.push("/admin/view-all-users");
+        router.push("/admin/add-booking-details");
       },
     },
   ];

@@ -5,7 +5,7 @@ export type bookingListProps = {
   user_id?: string | number;
   place?: {
     id?: number,
-    label?: string,
+    designation?: string,
     drop_address?: string,
     pickup_address?: string,
     base_fare?: number,
@@ -26,7 +26,7 @@ export interface TicketProps {
   user_id?: string;
   place: {
     id: number,
-    label: string,
+    designation: string,
     drop_address: string,
     pickup_address: string,
     base_fare: number,
