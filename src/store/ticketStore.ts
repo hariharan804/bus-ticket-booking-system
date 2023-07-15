@@ -29,6 +29,8 @@ export const useTicketStore = create(
         set({ ...oldData, ...data });
       },
       updateTicketList: async (bookingData: bookingListProps) => {
+        debugger
+        try {
         console.log(bookingData);
         const res = await apiCall("POST", "/ticket/book_ticket", {
           traveler_name: bookingData?.traveler_name,
@@ -48,6 +50,7 @@ export const useTicketStore = create(
           email: bookingData?.email,
           mobile: bookingData?.mobile,
         });
+        console.log("🚀 ~ file: ticketStore.ts:52 ~ updateTicketList: ~ res:", res)
 
         if (res?.data?.length > 0) {
           set({ bookedList: [...res?.data] });
@@ -55,6 +58,14 @@ export const useTicketStore = create(
           const oldData = get().bookedList;
           set({ bookedList: [...oldData, bookingData] });
         }
+      } catch (error) {
+        const oldData = get().bookedList;
+        set({ bookedList: [...oldData, bookingData] });
+        console.log(
+          "🚀 ~ file: authStore.ts:46 ~ getAllUsers: ~ error:",
+          error
+        );
+      }
       },
       getAllTickets: async () => {
         try {
