@@ -1,5 +1,5 @@
-"use client";
 import { Metadata } from 'next';
+"use client";
 import './globals.css';
 import { MuiThemeProvider } from '@/helpers/theme';
 // import Header from '@/components/header';
@@ -9,10 +9,10 @@ import '@fontsource/nunito-sans';
 import '@fontsource/lato';
 import { Toaster } from 'react-hot-toast';
 
-export const metadata: Metadata = {
-  title: `Bus Ticket Booking System`,
-  description: `Bus Ticket Booking System`,
-};
+// export const metadata: Metadata = {
+//   title: `Bus Ticket Booking System`,
+//   description: `Bus Ticket Booking System`,
+// };
 
 export default function RootLayout({
   children,
