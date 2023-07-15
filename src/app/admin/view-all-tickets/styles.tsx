@@ -7,9 +7,10 @@ export const styles: { [key: string]: SxProps } = {
     color: "primary.900",
   },
   heading: {
-    fontSize: "16px",
+    fontSize: "18px",
     fontWeight: "700",
     color: "text.900",
+    padding: "12px 0",
   },
   td: {
     fontWeight: "600",
@@ -18,6 +19,7 @@ export const styles: { [key: string]: SxProps } = {
     letterSpacing: "0.05rem",
     color: "#7d7787",
     textTransform: "capitalize",
+    padding: "12px 0",
   },
   success: {
     fontWeight: "600",
@@ -35,8 +37,7 @@ export const styles: { [key: string]: SxProps } = {
     padding: "16px 20px",
     margin: "16px 0",
     borderRadius: "6px",
-    border: "2px dashed",
-    borderColor:'secondary.main'
+    border: "1px solid #00000014",
   },
   time: {
     color: "text.800",
@@ -54,8 +55,7 @@ export const styles: { [key: string]: SxProps } = {
     marginTop: "6px",
     backgroundColor: "secondary.dark",
     borderRadius: "6px",
-    padding: "2px 12px",
-    height:'44px',
+    padding: "12px 12px",
     "&:hover": {
       backgroundColor: "secondary.dark",
       opacity: "0.80",
@@ -69,8 +69,5 @@ export const styles: { [key: string]: SxProps } = {
     "& span": {
       color: "secondary.main",
     },
-  },
-  row: {
-    marginBottom: "12px",
   },
 };

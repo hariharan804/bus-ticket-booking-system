@@ -1,7 +1,8 @@
 export type bookingListProps = {
-  id:string,
+  id?: string | number;
   traveler_name?: string;
   gender?: string;
+  user_id?: string | number;
   place?: {
     id?: number,
     label?: string,
@@ -13,13 +14,16 @@ export type bookingListProps = {
     bus_no?: string,
     bus_contact?: string,
   };
+  travel_time?:string,
   payment?: string,
   email?: string;
   mobile?: number |  string;
 }
 export interface TicketProps {
+  id?: string | number;
   traveler_name: string;
   gender: string;
+  user_id?: string;
   place: {
     id: number,
     label: string,
@@ -32,6 +36,7 @@ export interface TicketProps {
     bus_contact: string,
   };
   email: string;
+  travel_time?: string;
   mobile: number |  string;
   updateTicketStore: (data: object) => void;
   bookedList: bookingListProps[]

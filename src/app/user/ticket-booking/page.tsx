@@ -76,7 +76,7 @@ function TicketBooking() {
 
   useEffect(() => {
     if (watch()?.place || watch()?.travel_time) {
-      setCurrentBus(watch());
+      setCurrentBus(watch() as any);
     }
   }, [watch()?.place, watch()?.travel_time]);
   const busDetails = [
@@ -227,10 +227,6 @@ function TicketBooking() {
             </Box>
           </Grid>
         </Grid>
-
-        {/* Name
-
-Gender date and time place*/}
       </Box>
       {currentBus?.place?.id !== 0 && currentBus?.travel_time && (
         <Box
@@ -269,7 +265,7 @@ Gender date and time place*/}
                 {currentBus?.place?.label?.split("to")?.[0]}
               </Typography>
               <Typography sx={styles.label}>
-                {currentBus?.place?.drop_address}
+                {currentBus?.place?.pickup_address}
               </Typography>
             </Grid>
             <Grid

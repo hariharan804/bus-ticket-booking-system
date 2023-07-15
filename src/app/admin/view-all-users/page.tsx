@@ -11,11 +11,11 @@ import {
   TableBody,
 } from "@mui/material";
 import { styles } from "./styles";
-import { useTicketStore } from "@/store/ticketStore";
 import { useRouter } from "next/navigation";
+import { useStore } from "@/store/authStore";
 
 function BookedTicket() {
-  const { bookedList } = useTicketStore();
+  const { userList } = useStore();
   const router = useRouter();
   const goToViewTicket = (data: string | number) => {
     router.push("./view-ticket?id=" + data);
@@ -23,7 +23,7 @@ function BookedTicket() {
   return (
     <Container>
       <Typography sx={styles.title} mt={3}>
-        Booked Tickets
+        View All Users
       </Typography>
 
       <Box sx={styles.section}>
@@ -35,7 +35,7 @@ function BookedTicket() {
           }}
           mb={1}
         >
-          Traveller Details
+          Users Details
         </Typography>
         <TableContainer>
           <Table
@@ -45,12 +45,11 @@ function BookedTicket() {
           >
             <TableHead>
               <TableRow>
-                <TableCell sx={styles.heading}>Traveler Name</TableCell>
-                <TableCell sx={styles.heading}>Gender</TableCell>
-                <TableCell sx={styles.heading}>Travel Hours</TableCell>
-                <TableCell sx={styles.heading}>Place</TableCell>
-                <TableCell sx={styles.heading}>Bus Name</TableCell>
-                <TableCell sx={styles.heading}>Payed</TableCell>
+                <TableCell sx={styles.heading}>User Id</TableCell>
+                <TableCell sx={styles.heading}>Name</TableCell>
+                <TableCell sx={styles.heading}>Email Id</TableCell>
+                <TableCell sx={styles.heading}>DOB</TableCell>
+                <TableCell sx={styles.heading}>Role</TableCell>
                 <TableCell sx={styles.heading} align="center">
                   Status
                 </TableCell>
@@ -60,43 +59,36 @@ function BookedTicket() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {bookedList?.length > 0 ? (
+              {userList?.length > 0 ? (
                 <>
-                  {bookedList.map((row) => (
+                  {userList.map((row, index) => (
                     <TableRow
-                      key={row.traveler_name}
+                      key={row.id}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
-                      <TableCell sx={styles.td}>{row.traveler_name}</TableCell>
-                      <TableCell sx={styles.td}>{row.gender}</TableCell>
-                      <TableCell sx={styles.td}>
-                        {row.place?.travel_hours}
-                      </TableCell>
-                      <TableCell sx={styles.td}>{row.place?.label}</TableCell>
-                      <TableCell sx={styles.td}>
-                        {row?.place?.bus_name}
-                      </TableCell>
-                      <TableCell sx={styles.td}>
-                        ₹{" "}
-                        {(row?.place?.base_fare || 0) * 0.02 +
-                          (row?.place?.base_fare || 0)}
-                      </TableCell>
+                      <TableCell sx={styles.td}>{row.id || index}</TableCell>
+                      <TableCell sx={styles.td}>{row.name}</TableCell>
+                      <TableCell sx={styles.td}>{row.email}</TableCell>
+                      <TableCell sx={styles.td}>{row.dob}</TableCell>
+                      <TableCell sx={styles.td}>{row?.role}</TableCell>
+
                       <TableCell align="center">
-                        <Typography sx={styles.success}>
-                          {row?.payment}
-                        </Typography>
+                        <Typography sx={styles.success}>{"Active"}</Typography>
                       </TableCell>
                       <TableCell
                         align="center"
                         sx={{
                           ...styles.td,
                           textDecoration: "underline",
-                          color: "secondary.light",
+                          color:
+                            row?.role === "admin"
+                              ? "info.light"
+                              : "error.light",
                           cursor: "pointer",
                         }}
                         onClick={() => goToViewTicket(row?.id)}
                       >
-                        View Ticket
+                        {row?.role === "admin" ? "No action" : "Remove"}
                       </TableCell>
                     </TableRow>
                   ))}

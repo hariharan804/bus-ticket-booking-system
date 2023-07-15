@@ -8,6 +8,7 @@ export const useStore = create(
     (set, get) => ({
       isAuth: false,
       userDetails: {
+        id:'',
         name: "",
         email: "",
         password: "",
@@ -35,6 +36,7 @@ export const useStore = create(
       },
       userList: [
         {
+          id:2,
           name: "Demo User",
           email: "demouser@mail.com",
           password: "user@123",
@@ -42,6 +44,7 @@ export const useStore = create(
           role: "user",
         },
         {
+          id:1,
           name: "Admin",
           email: "admin@mail.com",
           password: "admin@123",

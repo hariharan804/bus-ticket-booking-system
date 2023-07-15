@@ -1,15 +1,9 @@
 {
-  "name": "typescript-nextjs-starter",
-  "description": "A TypeScript starter for Next.js that includes all you need to build amazing projects",
+  "name": "BUS TICKET BOOKING SYSTEM",
+  "description": "BUS TICKET BOOKING SYSTEM",
   "version": "1.0.0",
   "private": true,
-  "author": "João Pedro Schmitz <hey@joaopedro.dev> (@jpedroschmitz)",
-  "license": "MIT",
-  "keywords": [
-    "nextjs",
-    "starter",
-    "typescript"
-  ],
+  "author": "Hariharan @hariharan804",
   "scripts": {
     "dev": "next",
     "build": "next build",

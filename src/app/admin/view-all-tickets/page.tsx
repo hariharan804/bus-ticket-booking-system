@@ -17,13 +17,13 @@ import { useRouter } from "next/navigation";
 function BookedTicket() {
   const { bookedList } = useTicketStore();
   const router = useRouter();
-  const goToViewTicket = (data: string | number) => {
-    router.push("./view-ticket?id=" + data);
+  const goToViewTicket = (id: string | number) => {
+    router.push("./view-ticket?id=" + id);
   };
   return (
     <Container>
       <Typography sx={styles.title} mt={3}>
-        Booked Tickets
+        All Booked Tickets
       </Typography>
 
       <Box sx={styles.section}>
@@ -45,6 +45,7 @@ function BookedTicket() {
           >
             <TableHead>
               <TableRow>
+                <TableCell sx={styles.heading}>User ID</TableCell>
                 <TableCell sx={styles.heading}>Traveler Name</TableCell>
                 <TableCell sx={styles.heading}>Gender</TableCell>
                 <TableCell sx={styles.heading}>Travel Hours</TableCell>
@@ -67,6 +68,7 @@ function BookedTicket() {
                       key={row.traveler_name}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
+                      <TableCell sx={styles.td}>{row.user_id || 2}</TableCell>
                       <TableCell sx={styles.td}>{row.traveler_name}</TableCell>
                       <TableCell sx={styles.td}>{row.gender}</TableCell>
                       <TableCell sx={styles.td}>
@@ -102,7 +104,7 @@ function BookedTicket() {
                   ))}
                 </>
               ) : (
-                "No Data found!"
+                "Not found!"
               )}
             </TableBody>
           </Table>

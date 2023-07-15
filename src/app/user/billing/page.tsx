@@ -18,6 +18,7 @@ import { styles } from "../ticket-booking/styles";
 import { useRouter } from "next/navigation";
 import { useTicketStore } from "@/store/ticketStore";
 import { toast } from "react-hot-toast";
+import { useStore } from "@/store/authStore";
 
 function Billing() {
   const schema = yup
@@ -30,6 +31,7 @@ function Billing() {
     })
     .required();
   const ticketData = useTicketStore();
+  const {userDetails} = useStore();
   const router = useRouter();
   const { handleSubmit, control, watch } = useForm({
     // defaultValues: { email: "superadmin@gmail.com", password: "123456" },
@@ -45,11 +47,14 @@ function Billing() {
       gender: ticketData?.gender,
       place: ticketData?.place,
       email: ticketData?.email,
+      travel_time: ticketData?.travel_time,
       mobile: ticketData?.mobile,
       payment: "success",
+      user_id: userDetails?.id ,
+      // ...ticketData
     });
     toast.success("Ticket Booked Successfully!");
-    // router.push("/user/view-booked-tickets");
+    router.push("/user/view-booked-tickets");
   };
   return (
     <Container>

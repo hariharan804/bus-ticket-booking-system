@@ -28,10 +28,31 @@ function Header() {
   const logout = () => {
     setUserDetails({});
     setAuth(false);
+    localStorage.clear();
     router.replace("/login");
   };
   const appName = "Bus Ticket Booking System";
-  const pages: any = [
+  const adminPages = [
+    {
+      label: "View all tickets",
+      onClick: () => {
+        router.push("/admin/view-all-tickets");
+      },
+    },
+    {
+      label: "View all users",
+      onClick: () => {
+        router.push("/admin/view-all-users");
+      },
+    },
+    {
+      label: "Add Bus details",
+      onClick: () => {
+        router.push("/admin/view-all-users");
+      },
+    },
+  ];
+  let pages: any = [
     {
       label: "Book Ticket",
       onClick: () => {
@@ -45,6 +66,9 @@ function Header() {
       },
     },
   ];
+  if (userDetails?.role === "admin") {
+    pages = [...pages, ...adminPages];
+  }
   const settings = [
     {
       label: "Book Ticket",
