@@ -5,7 +5,7 @@ import { AxiosResponse } from 'axios';
 // axios.defaults.withCredentials = true;
 // axios.defaults.credentials = 'include';
 export const http = axios.create({
-  baseURL: 'https://api.factmedia.in',
+  baseURL: 'http://localhost:5000',
 });
 
 const requestHandler = (request: InternalAxiosRequestConfig<any>) => {

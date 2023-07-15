@@ -39,6 +39,7 @@ export interface TicketProps {
   travel_time?: string;
   mobile: number |  string;
   updateTicketStore: (data: object) => void;
+  getAllTickets: () => void;
   bookedList: bookingListProps[]
   updateTicketList:(bookingData: bookingListProps)=> void;
 }

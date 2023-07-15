@@ -1,6 +1,6 @@
 "use client";
 import { Box, Button, SxProps, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -97,14 +97,16 @@ function Login() {
     })
     .required();
   const router = useRouter();
-  const { userLogin } = useStore();
+  const { userLogin, getAllUsers } = useStore();
   const { handleSubmit, control } = useForm({
     defaultValues: { email: "demouser@mail.com", password: "user@123" },
 
     resolver: yupResolver(schema),
   });
   // const router = useRouter();
-
+  useEffect(() => {
+    getAllUsers();
+  }, []);
   const onSubmit = async (data: any) => {
     const res = await userLogin({
       email: data?.email,

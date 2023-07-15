@@ -1,17 +1,9 @@
 "use client";
-import { MyInput } from "@/components";
-import TrendingFlatIcon from "@mui/icons-material/TrendingFlat";
 import {
   Box,
   Typography,
   Container,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Paper,
+  
   Stack,
   Button,
 } from "@mui/material";
@@ -28,10 +20,11 @@ function ViewTicket() {
   const { bookedList } = useTicketStore();
   const searchParam = useSearchParams();
   const id = searchParam.get("id");
+  console.log("🚀 ~ file: page.tsx:23 ~ ViewTicket ~ id:", id)
 
   const [ticketData, setTicketData] = useState<bookingListProps>({});
   useEffect(() => {
-    const data = bookedList?.find((val) => val?.id === id) || bookedList?.[0];
+    const data = bookedList?.find((val) => parseInt(val?.id) === parseInt(id)) || bookedList?.[0];
     console.log("🚀 ~ file: page.tsx:37 ~ useEffect ~ data:", data);
     setTicketData(data || {});
   }, [id]);
@@ -75,7 +68,7 @@ function ViewTicket() {
         <Stack direction={"row"} gap={"12px"} sx={styles?.row}>
           <Typography sx={styles?.td}>Designation : </Typography>
           <Typography sx={styles?.heading}>
-            {ticketData?.place?.label}
+            {ticketData?.place?.designation}
           </Typography>
         </Stack>
 

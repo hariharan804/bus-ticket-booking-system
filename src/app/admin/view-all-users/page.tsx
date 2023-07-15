@@ -15,10 +15,10 @@ import { useRouter } from "next/navigation";
 import { useStore } from "@/store/authStore";
 
 function BookedTicket() {
-  const { userList } = useStore();
-  const router = useRouter();
+  const { userList, deleteUsers } = useStore();
+  // const router = useRouter();
   const goToViewTicket = (data: string | number) => {
-    router.push("./view-ticket?id=" + data);
+    deleteUsers(data);
   };
   return (
     <Container>
@@ -86,7 +86,9 @@ function BookedTicket() {
                               : "error.light",
                           cursor: "pointer",
                         }}
-                        onClick={() => goToViewTicket(row?.id)}
+                        onClick={() =>
+                          row?.role !== "admin" && goToViewTicket(row?.id)
+                        }
                       >
                         {row?.role === "admin" ? "No action" : "Remove"}
                       </TableCell>

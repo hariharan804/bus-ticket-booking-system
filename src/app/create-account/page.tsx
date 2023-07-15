@@ -76,6 +76,8 @@ export const styles: { [key: string]: SxProps } = {
   },
 };
 
+ 
+
 function CreateAccount() {
   const { isAuth, setUserDetails } = useStore();
   const router = useRouter();
@@ -98,13 +100,16 @@ function CreateAccount() {
       dob: yup.string().required("Please select your Date of birth"),
     })
     .required();
-
+  // create();
+  
   const { handleSubmit, control } = useForm({
     // defaultValues: { email: "superadmin@gmail.com", password: "123456" },
     resolver: yupResolver(schema),
   });
 
   useEffect(() => {
+ 
+
     if (isAuth) {
       router.replace("/");
     }

@@ -18,7 +18,7 @@ function BookedTicket() {
   const { bookedList } = useTicketStore();
   const router = useRouter();
   const goToViewTicket = (id: string | number) => {
-    router.push("./view-ticket?id=" + id);
+    router.push("/user/view-ticket?id=" + id);
   };
   return (
     <Container>
@@ -49,9 +49,9 @@ function BookedTicket() {
                 <TableCell sx={styles.heading}>Traveler Name</TableCell>
                 <TableCell sx={styles.heading}>Gender</TableCell>
                 <TableCell sx={styles.heading}>Travel Hours</TableCell>
-                <TableCell sx={styles.heading}>Place</TableCell>
+                <TableCell sx={styles.heading}>Designation</TableCell>
                 <TableCell sx={styles.heading}>Bus Name</TableCell>
-                <TableCell sx={styles.heading}>Payed</TableCell>
+                <TableCell sx={styles.heading}>Paid</TableCell>
                 <TableCell sx={styles.heading} align="center">
                   Status
                 </TableCell>
@@ -74,7 +74,7 @@ function BookedTicket() {
                       <TableCell sx={styles.td}>
                         {row.place?.travel_hours}
                       </TableCell>
-                      <TableCell sx={styles.td}>{row.place?.label}</TableCell>
+                      <TableCell sx={styles.td}>{row.place?.designation}</TableCell>
                       <TableCell sx={styles.td}>
                         {row?.place?.bus_name}
                       </TableCell>

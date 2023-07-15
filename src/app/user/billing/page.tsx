@@ -31,7 +31,7 @@ function Billing() {
     })
     .required();
   const ticketData = useTicketStore();
-  const {userDetails} = useStore();
+  const { userDetails } = useStore();
   const router = useRouter();
   const { handleSubmit, control, watch } = useForm({
     // defaultValues: { email: "superadmin@gmail.com", password: "123456" },
@@ -50,11 +50,15 @@ function Billing() {
       travel_time: ticketData?.travel_time,
       mobile: ticketData?.mobile,
       payment: "success",
-      user_id: userDetails?.id ,
+      user_id: userDetails?.id,
       // ...ticketData
     });
     toast.success("Ticket Booked Successfully!");
     router.push("/user/view-booked-tickets");
+  };
+  const getTax = (val: number) => {
+    const tax = val * 0.02;
+    return Number(tax) + Number(val);
   };
   return (
     <Container>
@@ -195,9 +199,7 @@ function Billing() {
                 </Box>
                 <Box flexGrow={1}>
                   <Typography sx={styles.cost} align="right">
-                    ₹{" "}
-                    {ticketData?.place?.base_fare * 0.02 +
-                      ticketData?.place?.base_fare}
+                    ₹ {getTax(ticketData?.place?.base_fare)}
                   </Typography>
                 </Box>
               </Stack>

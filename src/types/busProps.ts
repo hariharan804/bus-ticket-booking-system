@@ -13,4 +13,5 @@ export type busDetailsProps = {
 export interface busDetailsInterface {
   busDetailsList: busDetailsProps[]
   updateBusDetails:(bookingData: busDetailsProps)=> void;
+  getAllBus:()=> void;
 }

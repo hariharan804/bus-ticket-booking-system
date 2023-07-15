@@ -26,7 +26,6 @@ function Header() {
     null
   );
   const logout = () => {
-    setUserDetails({});
     setAuth(false);
     localStorage.clear();
     router.replace("/login");

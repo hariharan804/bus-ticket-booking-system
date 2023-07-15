@@ -44,7 +44,7 @@ function TicketBooking() {
     .required();
   const { userDetails } = useStore();
   const { updateTicketStore } = useTicketStore();
-  const { busDetailsList } = useBusStore();
+  const { busDetailsList, getAllBus } = useBusStore();
   const router = useRouter();
   const { handleSubmit, control, watch } = useForm({
     defaultValues: {
@@ -75,13 +75,18 @@ function TicketBooking() {
     updateTicketStore(data);
     router.push("/user/billing");
   };
-
+  useEffect(() => {
+    getAllBus();
+  }, []);
   useEffect(() => {
     if (watch()?.place || watch()?.travel_time) {
       setCurrentBus(watch() as any);
     }
   }, [watch()?.place, watch()?.travel_time]);
- 
+  const getTax = (val: number) => {
+    const tax = val * 0.02;
+    return Number(tax) + Number(val);
+  };
   return (
     <Container>
       <Typography sx={styles.title} mt={3}>
@@ -358,9 +363,7 @@ function TicketBooking() {
                 </Box>
                 <Box flexGrow={1}>
                   <Typography sx={styles.cost} align="right">
-                    ₹{" "}
-                    {currentBus?.place?.base_fare * 0.02 +
-                      currentBus?.place?.base_fare}
+                    ₹ {getTax(currentBus?.place?.base_fare)}
                   </Typography>
                 </Box>
               </Stack>

@@ -13,4 +13,6 @@ export interface AuthProps {
   setUserDetails: (details: userDetailsProps) => void;
   setAuth: (auth: boolean) => void;
   userLogin: ({ email, password }: { email: string; password: string }) => userDetailsProps;
+  getAllUsers:()=>void;
+ deleteUsers:(id: string | number)=>void;
 }
